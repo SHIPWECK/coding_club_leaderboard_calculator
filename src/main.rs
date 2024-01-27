@@ -1,9 +1,9 @@
 use std::{collections::HashMap, fs::read_to_string};
 
-const COLUMNS_SKIPPED: usize = 4;
+const COLUMNS_SKIPPED: usize = 5;
 
 fn main() {
-    let mut scores: HashMap<&str, usize> = HashMap::new();
+    let mut scores: HashMap<&str, f64> = HashMap::new();
     let csv_string =
         read_to_string("Coding Club Leaderboard - Sheet1.csv").expect("Could not find CSV file");
 
@@ -12,6 +12,7 @@ fn main() {
         let name = line_iter
             .next()
             .unwrap_or_else(|| panic!("Error reading name for line {}", line_num));
+
         let score = line_iter
             .nth(COLUMNS_SKIPPED)
             .unwrap_or_else(|| panic!("Error getting score for {}", name))
@@ -26,7 +27,17 @@ fn main() {
 
     let mut leader_board = scores.into_iter().collect::<Vec<_>>();
 
-    leader_board.sort_by(|(_, score1), (_, score2)| score1.cmp(score2).reverse());
+    leader_board.sort_by(|(name1, score1), (name2, score2)| {
+        score1
+            .partial_cmp(score2)
+            .unwrap_or_else(|| {
+                panic!(
+                    "Error comparing values for {} and {} (values: {}, {})",
+                    name1, name2, score1, score2
+                )
+            })
+            .reverse()
+    });
 
     for (idx, (name, score)) in leader_board.into_iter().enumerate() {
         println!("{}. {name}: {score} points", idx + 1);
