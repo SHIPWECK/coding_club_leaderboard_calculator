@@ -5,7 +5,7 @@ const COLUMNS_SKIPPED: usize = 5;
 fn main() {
     let mut scores: HashMap<&str, f64> = HashMap::new();
     let csv_string =
-        read_to_string("Coding Club Leaderboard - Sheet1.csv").expect("Could not find CSV file");
+        read_to_string("Coding Club Scores - Sheet1.csv").expect("Could not find CSV file");
 
     for (line_num, line) in csv_string.trim().lines().skip(1).enumerate() {
         let mut line_iter = line.split(',');
