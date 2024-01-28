@@ -16,17 +16,15 @@ fn main() {
         let score = line_iter
             .nth(COLUMNS_SKIPPED)
             .unwrap_or_else(|| panic!("Error getting score for {}", name))
-            .parse()
+            .parse::<f64>()
             .unwrap_or_else(|_| panic!("Error parsing score for {}", name));
 
-        scores
-            .entry(name)
-            .and_modify(|old_score| *old_score += score)
-            .or_insert(score);
+        *scores.entry(name).or_default() += score;
     }
 
     let mut leader_board = scores.into_iter().collect::<Vec<_>>();
 
+    // sorts the leaderboard in descending order
     leader_board.sort_by(|(name1, score1), (name2, score2)| {
         score1
             .partial_cmp(score2)
