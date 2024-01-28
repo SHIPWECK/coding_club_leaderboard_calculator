@@ -11,13 +11,13 @@ fn main() {
         let mut line_iter = line.split(',');
         let name = line_iter
             .next()
-            .unwrap_or_else(|| panic!("Error reading name for line {}", line_num));
+            .unwrap_or_else(|| panic!("Error reading name for line {line_num}"));
 
         let score = line_iter
             .nth(COLUMNS_SKIPPED)
-            .unwrap_or_else(|| panic!("Error getting score for {}", name))
+            .unwrap_or_else(|| panic!("Error getting score for {name} on line {line_num}"))
             .parse::<f64>()
-            .unwrap_or_else(|_| panic!("Error parsing score for {}", name));
+            .unwrap_or_else(|_| panic!("Error parsing score for {name} on line {line_num}"));
 
         *scores.entry(name).or_default() += score;
     }
@@ -30,8 +30,7 @@ fn main() {
             .partial_cmp(score2)
             .unwrap_or_else(|| {
                 panic!(
-                    "Error comparing values for {} and {} (values: {}, {})",
-                    name1, name2, score1, score2
+                    "Error comparing values for {name1} and {name2} (values: {score1}, {score2})"
                 )
             })
             .reverse()
